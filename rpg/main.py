@@ -8,11 +8,13 @@ pygame.init()
 
 screen = pygame.display.set_mode(window_size)
 
-# map
-tmx_data = load_pygame("map/map.tmx")
 
 # player
-player = engine.Player('images/entity/player/player_0_1.png', hp=100, speed=100, screen=screen)
+player = engine.Player(hp=100, speed=100, screen=screen)
+
+# map
+map = engine.World('map/map.tmx', screen, player)
+map.load_world()
 # textures
 
 pygame.display.set_caption("RPG")
@@ -25,12 +27,10 @@ while running:
     dt = clock.tick(60) / 1000
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            map.save_world(player.get_player_info())
             running = False
 
-    for layer in tmx_data.visible_layers:
-        if hasattr(layer, "tiles"):
-            for x, y, image in layer.tiles():
-                screen.blit(image, (x * tmx_data.tilewidth, y * tmx_data.tileheight))
+    map.update_world()
 
     player.move(dt)
 
