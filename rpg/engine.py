@@ -101,8 +101,13 @@ class Player:
             pass
 
     def get_player_info(self):
-        player_info = {'x': self.direction.x, 'y': self.direction.y, 'hp': self.hp}
+        player_info = {'x': self.player_rect.centerx, 'y': self.player_rect.centery, 'player_hp': self.hp}
         return player_info
+    
+    def update_player_info(self, coords: list, hp: int):
+        self.hp = hp
+        self.player_rect.centerx = coords[0]
+        self.player_rect.centery = coords[1]
 
 class World:
     def __init__(self, map, screen, player):
@@ -110,7 +115,7 @@ class World:
         self.screen = screen
         self.tmx_data = None
         self.player = player
-
+        self.save = None
 
     def load_world(self):
         self.tmx_data = load_pygame(self.map)
@@ -122,9 +127,22 @@ class World:
                     self.screen.blit(image, (x * self.tmx_data.tilewidth, y * self.tmx_data.tileheight))
 
     def save_world(self, player_info):
-        save = {'player_dir_x': player_info['x'],
+        self.save = {'player_dir_x': player_info['x'],
             'player_dir_y': player_info['y'],
-            'player_hp': player_info['hp']}
-        print(save)
+            'player_hp': player_info['player_hp']}
+        print(self.save)
         with open('save.json', 'w') as file:
-            json.dump(save, file, indent=4)
+            json.dump(self.save, file, indent=4)
+
+    def load_world_save(self):
+        try:
+            with open('save.json', 'r') as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            self.save_world({'x': 0, 'y': 0, 'hp': 100})
+
+        try:
+            print(data)
+        except UnboundLocalError:
+            print('UnboundLocalError')
+        return data
