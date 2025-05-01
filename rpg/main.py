@@ -8,14 +8,17 @@ pygame.init()
 
 screen = pygame.display.set_mode(window_size)
 
-
 # player
-player = engine.Player(hp=100, speed=100, screen=screen)
+player = engine.Player(100, speed=100, screen=screen)
 
 # map
 map = engine.World('map/map.tmx', screen, player)
 map.load_world()
-# textures
+save = map.load_world_save()
+try:
+    player.update_player_info([save['x'], save['y']], save['player_hp'])
+except KeyError:
+    player.update_player_info([save['player_dir_x'], save['player_dir_y']], save['player_hp'])
 
 pygame.display.set_caption("RPG")
 
