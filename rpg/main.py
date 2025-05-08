@@ -6,6 +6,10 @@ window_size = (600, 600)
 
 pygame.init()
 
+# check game files
+
+engine.CheckGameFiles()
+
 screen = pygame.display.set_mode(window_size)
 
 # player
@@ -40,6 +44,5 @@ while running:
     player.show()
 
     pygame.display.flip()
-    print(f"FPS: {clock.get_fps():.2f}, dt: {dt:.4f}")
 
 pygame.quit()
