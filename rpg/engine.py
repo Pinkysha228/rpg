@@ -1,8 +1,32 @@
 import pygame
 from pytmx import load_pygame
 import json
+import os
 
 pygame.init()
+
+def CheckGameFiles():
+    true_files_for_player = {
+        'player_0_0.png', 'player_0_1.png', 'player_0_2.png', 'player_0_3.png', 'player_0_4.png',
+        'player_0_5.png', 'player_10_3.png', 'player_10_4.png', 'player_10_5.png', 'player_1_0.png',
+        'player_1_1.png', 'player_1_2.png', 'player_1_3.png', 'player_1_4.png', 'player_1_5.png',
+        'player_2_0.png', 'player_2_1.png', 'player_2_2.png', 'player_2_3.png', 'player_2_4.png',
+        'player_2_5.png', 'player_3_1.png', 'player_3_3.png', 'player_3_4.png', 'player_3_5.png',
+        'player_4_3.png', 'player_4_4.png', 'player_4_5.png', 'player_5_3.png', 'player_5_4.png',
+        'player_5_5.png', 'player_6_3.png', 'player_6_4.png', 'player_6_5.png', 'player_7_3.png',
+        'player_7_4.png', 'player_7_5.png', 'player_8_3.png', 'player_8_4.png', 'player_8_5.png',
+        'player_9_3.png', 'player_9_4.png', 'player_9_5.png', 'shadow.png'
+    }
+    directory = "images/entity/player"
+    existing_files_for_player = set(os.listdir(directory))
+    missing_files_for_player = true_files_for_player - existing_files_for_player
+    if missing_files_for_player:
+        print(f"FileNotFound for player: {missing_files_for_player}")
+        surf = pygame.Surface((16, 32))
+        surf.fill((0, 0, 0,))
+        pygame.image.save(surf, 'images/entity/player/RPGEngine.png')
+    else:
+        print('Player files correct')
 
 
 class Player:
@@ -24,7 +48,7 @@ class Player:
 
     def load_animations(self):
         walk_right = []
-        for i in range(0, 3):
+        for i in range(1, 3):
             img = pygame.image.load(f'images/entity/player/player_{i}_0.png').convert_alpha()
             img_scaled = pygame.transform.scale(img, (img.get_width() * self.scale, img.get_height() * self.scale))
             walk_right.append(img_scaled)
